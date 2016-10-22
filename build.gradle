@@ -1,0 +1,27 @@
+apply plugin: "scala"
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  testCompile "io.gatling.highcharts:gatling-charts-highcharts:2.2.2"
+}
+
+task run(type: JavaExec, dependsOn: classes) {
+  main = "io.gatling.app.Gatling"
+  classpath sourceSets.test.runtimeClasspath
+  classpath configurations.runtime
+  jvmArgs = [
+    "-Durl=https://www.robein.nl",
+    "-DnumberOfUsers=3",
+    "-DnumberOfRepetitions=1",
+    "-DdurationMinutes=1",
+    "-DpauseBetweenRequestsMs=3000",
+    "-DmaxResponseTimeMs=8000"
+  ]
+  args = [
+    "--simulation", "gatling.simulations.RobeinSimulation"
+  ]
+  outputs.upToDateWhen { false }
+}
